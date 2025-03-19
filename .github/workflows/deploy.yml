@@ -1,0 +1,36 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main  # Run when code is pushed to the main branch
+  workflow_dispatch:  # Allows manual trigger from GitHub UI
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'  # Change version if needed
+
+      - name: Install Dependencies
+        run: npm install  # Change based on your project (e.g., `yarn install`)
+
+      - name: Run Tests (Optional)
+        run: npm test  # Remove or modify if you don’t have 
+
+      - name: Deploy to Server
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}  # Add this in GitHub Secrets
+          SERVER_USER: ubuntu
+          SERVER_IP: ${{ secrets.SERVER_IP }}  # Add this in GitHub Secrets
+        run: |
+          echo "$SSH_PRIVATE_KEY" > private_key.pem
+          chmod 600 private_key.pem
+          ssh -o StrictHostKeyChecking=no -i private_key.pem $SERVER_USER@$SERVER_IP "cd /home/ubuntu/app && git pull && npm install && pm2 restart all"
