@@ -152,22 +152,14 @@ resource "aws_instance" "ubuntu_instance" {
 
 
 
-  user_data = <<-EOF
-              #!/bin/bash
-              sudo apt-get update -y
-              sudo apt-get upgrade -y
-              sudo apt-get install -y nginx
-              sudo systemctl start nginx
-              sudo systemctl enable nginx
-              sudo systemctl restart nginx
-              EOF
+  user_data = each.value.user_data
 
   tags = {
     Name = each.value.ec2_instance_name
   }
 
   provisioner "local-exec" {
-    command = "powershell -ExecutionPolicy Bypass -File ./push_to_github.ps1"
+    command = "powershell -ExecutionPolicy Bypass -File ${each.value.script_path}"
   }
 }
 

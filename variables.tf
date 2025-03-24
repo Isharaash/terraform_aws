@@ -20,5 +20,9 @@ variable "servers" {
     ec2_instance_name    = string
     private_ip           = string
     igw_id               = optional(string) # If provided, use existing Internet Gateway
+    script_path          = optional(string)
+    user_data            = optional(string)
+
   }))
 }
+

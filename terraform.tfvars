@@ -18,20 +18,30 @@ servers = {
     key_pair_name        = "custom-key-pair"
     ec2_instance_name    = "custom-ec2-instance"
     private_ip           = "10.0.1.10"  # ✅ Fix: Must be inside subnet CIDR range
+    script_path          = "./push_to_github.ps1"
+    user_data            = <<-EOF
+                            #!/bin/bash
+                            sudo apt-get update -y
+                            sudo apt-get install -y apache2
+                            sudo systemctl start apache2
+                            sudo systemctl enable apache2
+                            EOF
   }
 
   # "server2" = {
   #   region               = "ap-southeast-1"
-  #   vpc_id               = "vpc-09ef0f3ada4e188be"
-  #   subnet_id            = "subnet-0b7bbcc66aab97997"
+  #   vpc_id               = "vpc-049fe9c5cc6dddc17"
+  #   subnet_id            = "subnet-02b4445825f12d383"
   #   instance_type        = "t2.micro"
   #   ami_id               = "ami-0672fd5b9210aa093"
-  #   security_group_id    = "sg-00fea4ad2ba583267"
+  #   security_group_id    = "sg-00e6c4e1a6674e62f"
   #   key_pair_name        = "shared-key-new"
   #   ec2_instance_name    = "custom-ec2-instance-2"
   #   private_ip           = null
-  #   igw_id               = "igw-005c91fdc96740856"
-  # }
+  #   igw_id               = "igw-028abe28fa5da3ab7"
+  #   script_path          = "data.ps1" 
+  #    }
+  
   #  "server3" = {
   #   region               = "ap-southeast-1"
   #   vpc_id               = "vpc-01ddb5a3185473d50"
