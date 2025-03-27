@@ -33,3 +33,8 @@ output "elastic_ips" {
   description = "The allocated Elastic IP addresses"
   value       = { for key, eip in aws_eip.ec2_eip : key => eip.public_ip }
 }
+
+output "instance_ids" {
+  description = "The IDs of the created EC2 instances"
+  value       = { for key, instance in aws_instance.ubuntu_instance : key => instance.id }
+}
